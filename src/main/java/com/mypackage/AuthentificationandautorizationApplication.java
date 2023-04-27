@@ -1,4 +1,4 @@
-package com.mypackage.authentificationandautorization;
+package com.mypackage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
