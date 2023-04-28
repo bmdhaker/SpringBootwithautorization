@@ -13,11 +13,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mypackage.models.ERole;
@@ -31,6 +33,7 @@ import com.mypackage.request.LoginRequest;
 import com.mypackage.request.SignupRequest;
 import com.mypackage.security.jwt.JwtUtils;
 import com.mypackage.security.services.UserDetailsImpl;
+import com.mypackage.security.services.UserDetailsServiceImpl;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -51,6 +54,9 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+  
+  @Autowired
+  private UserDetailsServiceImpl userDetailsService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -72,7 +78,21 @@ public class AuthController {
                          userDetails.getEmail(), 
                          roles));
   }
-
+//
+  @RequestMapping(method = RequestMethod.POST, value = "/profile")
+	public ResponseEntity<?> afficherProfile(@RequestBody LoginRequest loginRequest) throws Exception {
+		//authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+		User user=new User();
+		user.setUsername(userDetails.getUsername());
+		user.setEmail(userDetails.getUsername());
+		user.setPassword(loginRequest.getPassword());
+		System.out.println("je suis dans profile");
+		//return userDetails;
+		return ResponseEntity.ok(user.toString());
+	}
+  
+  
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
