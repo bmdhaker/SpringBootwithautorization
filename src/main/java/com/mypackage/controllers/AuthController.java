@@ -20,8 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mypackage.models.ERole;
+import com.mypackage.models.Role;
+import com.mypackage.models.User;
+import com.mypackage.reponse.JwtResponse;
+import com.mypackage.reponse.MessageResponse;
 import com.mypackage.repository.RoleRepository;
 import com.mypackage.repository.UserRepository;
+import com.mypackage.request.LoginRequest;
+import com.mypackage.request.SignupRequest;
 import com.mypackage.security.jwt.JwtUtils;
 import com.mypackage.security.services.UserDetailsImpl;
 
